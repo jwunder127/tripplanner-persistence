@@ -17,10 +17,24 @@ $(function () {
     var $restaurantSelect = $optionsPanel.find('#restaurant-choices');
     var $activitySelect = $optionsPanel.find('#activity-choices');
 
+
     // make all the option tags (second arg of `forEach` is a `this` binding)
-    hotels.forEach(makeOption, $hotelSelect);
-    restaurants.forEach(makeOption, $restaurantSelect);
-    activities.forEach(makeOption, $activitySelect);
+
+    $.get('/api/hotels')
+        .then(function(hotels){
+            hotels.forEach(makeOption, $hotelSelect);
+            });
+
+    $.get('/api/restaurants')
+        .then(function(restaurants){
+            restaurants.forEach(makeOption, $restaurantSelect);
+            });
+
+    $.get('/api/activities')
+        .then(function(activities){
+            activities.forEach(makeOption, $activitySelect);
+            });
+
 
     // Once you've made AJAX calls to retrieve this information,
     // call attractions.loadEnhancedAttractions in the fashion

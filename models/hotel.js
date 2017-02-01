@@ -16,7 +16,7 @@ var Hotel = db.define('hotel', {
   },
   getterMethods: {
     type: function () {
-      return 'hotel'
+      return 'hotel';
     }
   }
 });
