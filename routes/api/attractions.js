@@ -46,7 +46,10 @@ router.get('/days/:id', function(req, res, next){
 });
 
 router.delete('/days/:id', function(req, res, next){
-  Day.findById(req.params.id)
+  //find days to destroy
+  Day.findOne({
+      where: {number: req.params.id}
+    })
     .then(function(foundDay){
       return foundDay.destroy();
     }).then(function(destroyedDay){
@@ -54,18 +57,34 @@ router.delete('/days/:id', function(req, res, next){
       console.log('destroyed a day, you are mean');
     })
     .catch(next);
-});
+
+  let dayCounter = 1;
+  Day.findAll()
+    .then(allDays => {
+      return allDays.forEach(dayInstance => {
+        console.log('dayInstance.number before:', dayInstance.number);
+        dayInstance.number = dayCounter;
+        console.log('dayInstance.number after:', dayInstance.number);
+        dayCounter++;
+        console.log('daycounter:', dayCounter)
+        return dayInstance.save();
+      });
+    });
+  });
 
 router.post('/days', function(req, res, next){
-  Day.create({
-  })
-    .then(function(createdDay){
-      createdDay.number = createdDay.id;
-      return createdDay.save().
-      then(function(createdDay){
-        res.send(createdDay);
-      });
-    }).catch(next);
+  Day.count()
+    .then(numDays => {
+      Day.create({
+        number: numDays + 1
+      })
+      .then(function(createdDay){
+        return createdDay.save()
+          .then(function(createdDay){
+            res.send(createdDay);
+          });
+        });
+  }).catch(next);
 });
 
 router.post('/days/:id/restaurants', function(req, res, next){
@@ -82,4 +101,3 @@ router.post('/days/:id/activities', function(req, res, next){
 
 });
 module.exports = router;
-

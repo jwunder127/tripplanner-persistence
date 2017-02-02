@@ -59,6 +59,8 @@ var tripModule = (function () {
 //$.ajax({url: '/api/days/22', type: 'DELETE'})
 //set current day to variable
 //send ajax delete request with current day = :id
+//switch to current day
+//make sure all numbers are current.
   function deleteCurrentDay () {
     // prevent deleting last day
     $.ajax({url: '/api/days/' + currentDay.number, type: 'DELETE'})
