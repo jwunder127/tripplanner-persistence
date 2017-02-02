@@ -7,6 +7,7 @@ var Place = require('./models/place');
 var Hotel = require('./models/hotel');
 var Restaurant = require('./models/restaurant');
 var Activity = require('./models/activity');
+var Day = require('./models/day');
 
 var data = {
   hotel: [
@@ -62,6 +63,8 @@ var data = {
   ]
 };
 
+
+
 db.sync({force: true})
 .then(function () {
   console.log("Dropped old data, now inserting data");
@@ -73,6 +76,8 @@ db.sync({force: true})
       });
     });
   });
+}).then(function(){
+  return Day.bulkCreate([{number: 1}, {number: 2}, {number: 3}]);
 })
 .then(function () {
   console.log("Finished inserting data");

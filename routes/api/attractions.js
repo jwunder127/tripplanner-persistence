@@ -40,7 +40,7 @@ router.get('/days', function(req, res, next){
 router.get('/days/:id', function(req, res, next){
     Day.findById(req.params.id)
       .then(function(foundDay){
-        res.send(foundDay);
+        res.send('success');
       })
       .catch(next);
 });
@@ -55,23 +55,30 @@ router.delete('/days/:id', function(req, res, next){
     .catch(next);
 });
 
-router.post('/days/:id', function(req, res, next){
+router.post('/days', function(req, res, next){
   Day.create({
-    number: req.params.id
   })
     .then(function(createdDay){
-      console.log('you created a day, it is called', createdDay);
+      createdDay.number = createdDay.id;
+      return createdDay.save().
+      then(function(createdDay){
+        res.send(createdDay);
+      });
     }).catch(next);
 });
 
-router.post('/day/:id/:attraction', function(req, res, next){
-  var attraction = function(attraction){
-    return attraction[0].toUpper() + attraction.slice(1);
-  };
-  attraction.create({
-    //create the attraction here. end point 2/1/17
-  });
+router.post('/days/:id/restaurants', function(req, res, next){
+    // $hotelSelect.setDay(req.params.id);
 });
 
+
+router.post('/days/:id/restaurants', function(req, res, next){
+    // $restaurantSelect.setDay(req.params.id);
+});
+
+router.post('/days/:id/activities', function(req, res, next){
+  // $activitySelect.setDay(req.params.id);
+
+});
 module.exports = router;
 

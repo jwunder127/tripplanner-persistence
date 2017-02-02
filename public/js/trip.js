@@ -20,7 +20,7 @@ var tripModule = (function () {
   // application state
 
   var days = [],
-      currentDay;
+  currentDay;
 
   // jQuery selections
 
@@ -47,14 +47,18 @@ var tripModule = (function () {
 
   function addDay () {
     if (this && this.blur) this.blur(); // removes focus box from buttons
-    var newDay = dayModule.create({ number: days.length + 1 }); // dayModule
-    days.push(newDay);
-    if (days.length === 1) {
-      currentDay = newDay;
-    }
-    switchTo(newDay);
+      //receive post request, create new day in database, create new day
+      //on front end, make that new day the current day.
+      $.post('/api/days')
+        .then(newDay => {
+          console.log('using dayModule.create on', newDay);
+          var newFrontEndDay = dayModule.create(newDay);
+          switchTo(newFrontEndDay);
+        });
   }
-
+//$.ajax({url: '/api/days/22', type: 'DELETE'})
+//set current day to variable
+//send ajax delete request with current day = :id
   function deleteCurrentDay () {
     // prevent deleting last day
     if (days.length < 2 || !currentDay) return;
@@ -75,7 +79,12 @@ var tripModule = (function () {
   var publicAPI = {
 
     load: function () {
-      $(addDay);
+      $.get('/api/days')
+      .then(days => {
+        days.forEach(day => {
+        dayModule.create(day);
+        });
+      });
     },
 
     switchTo: switchTo,
