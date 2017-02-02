@@ -49,7 +49,8 @@ router.delete('/days/:id', function(req, res, next){
   Day.findById(req.params.id)
     .then(function(foundDay){
       return foundDay.destroy();
-    }).then(function(){
+    }).then(function(destroyedDay){
+      res.send(destroyedDay);
       console.log('destroyed a day, you are mean');
     })
     .catch(next);
